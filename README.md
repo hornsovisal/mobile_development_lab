@@ -1,17 +1,40 @@
-# mobile_development_lab
+# Mobile App Development Lab
 
-A new Flutter project.
+Flutter laboratory exercises and class activities completed during **Year 2, Term 3** at the **Cambodia Academy of Digital Technology (CADT)**.
 
-## Getting Started
+## Technologies
 
-This project is a starting point for a Flutter application.
+* Flutter
+* Dart
+* Git & GitHub
 
-A few resources to get you started if this is your first Flutter project:
+## Structure
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```text
+lib/
+├── activity1.dart
+├── main.dart
+├── W3/
+│   ├── EX-1
+│   ├── EX-2
+│   ├── EX-3
+│   └── EX-4
+└── W4/
+    ├── EX-1
+    ├── EX-2
+    └── EX-3
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+all week lab is store in lib/W<number>
+
+## Run the Project
+
+```bash
+flutter pub get
+flutter run lib/...
+```
+
+**Author:** Horn Sovisal
+**Program:** Telecommunications and Networking (Cybersecurity), CADT
+**Course** Mobile App Development for Cyber Security
+**Lecture** : Mr. Ronan Ogor

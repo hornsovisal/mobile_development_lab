@@ -25,16 +25,20 @@ lib/
     └── EX-3
 ```
 
-all week lab is store in lib/W<number>
+All weekly laboratory exercises are stored in the `lib/W<number>/` directories.
 
 ## Run the Project
 
 ```bash
 flutter pub get
-flutter run lib/...
+flutter run lib/main.dart
 ```
+
+To run a specific exercise, replace the entry file accordingly.
+
+## Information
 
 **Author:** Horn Sovisal
 **Program:** Telecommunications and Networking (Cybersecurity), CADT
-**Course** Mobile App Development for Cyber Security
-**Lecture** : Mr. Ronan Ogor
+**Course:** Mobile App Development for Cyber Security
+**Lecturer:** Mr. Ronan Ogor

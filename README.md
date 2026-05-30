@@ -38,7 +38,7 @@ To run a specific exercise, replace the entry file accordingly.
 
 ## Information
 
-**Author:** Horn Sovisal
-**Program:** Telecommunications and Networking (Cybersecurity), CADT
-**Course:** Mobile App Development for Cyber Security
-**Lecturer:** Mr. Ronan Ogor
+**Author:** Horn Sovisal,
+**Program:** Telecommunications and Networking (Cybersecurity), CADT,
+**Course:** Mobile App Development for Cyber Security,
+**Lecturer:** Mr. Ronan Ogor,

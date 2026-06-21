@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-class TemparatureScreen extends StatefulWidget {
-  const TemparatureScreen({super.key, required this.onNext});
-  final VoidCallback onNext;
+class TemperatureScreen extends StatefulWidget {
+  const TemperatureScreen({super.key});
 
   @override
-  State<TemparatureScreen> createState() => _TemparatureScreenState();
+  State<TemperatureScreen> createState() => _TemperatureScreenState();
 }
 
-class _TemparatureScreenState extends State<TemparatureScreen> {
-  double toFahrenheit(double temperatureDegree) {
-    return (temperatureDegree * 9 / 5) + 32;
-  }
+class _TemperatureScreenState extends State<TemperatureScreen> {
+  double celsius = 0;
+  double? fahrenheit;
 
-  double fahrenheit = 0;
+  final BoxDecoration textDecoration = BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(12),
+  );
 
   final InputDecoration inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
@@ -45,39 +46,40 @@ class _TemparatureScreenState extends State<TemparatureScreen> {
               ),
             ),
             const SizedBox(height: 50),
-            const Text("Temperature in Degrees:"),
+            const Text(
+              "Temperature in Degrees:",
+              style: TextStyle(color: Colors.white),
+            ),
             const SizedBox(height: 10),
             TextField(
               decoration: inputDecoration,
               style: const TextStyle(color: Colors.white),
+              keyboardType: TextInputType.number,
               onChanged: (value) {
                 setState(() {
-                  final double ceicus = double.tryParse(value) ?? 0;
-                  fahrenheit = toFahrenheit(ceicus);
+                  if (value.trim().isEmpty) {
+                    fahrenheit = null;
+                  } else {
+                    celsius = double.tryParse(value) ?? 0;
+                    fahrenheit = (celsius * 9 / 5) + 32;
+                  }
                 });
               },
             ),
             const SizedBox(height: 30),
-            const Text("Temperature in Fahrenheit:"),
+            const Text(
+              "Temperature in Fahrenheit:",
+              style: TextStyle(color: Colors.white),
+            ),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(fahrenheit.toString()),
-            ),
-
-            Spacer(),
-            OutlinedButton(
-              onPressed: widget.onNext,
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(width: 1.0, color: Colors.white),
-              ),
-              child: const Text(
-                'Finish',
-                style: TextStyle(color: Colors.white, fontSize: 15),
+              decoration: textDecoration,
+              child: Text(
+                fahrenheit == null
+                    ? "No degree provided"
+                    : fahrenheit!.toStringAsFixed(2),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ],

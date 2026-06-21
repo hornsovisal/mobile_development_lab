@@ -13,7 +13,7 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-  //make all favorite to false
+  //make all favorite to false , index 1 = joke 1...
   List<bool> favorites = List.generate(jokes.length, (index) => false);
 
   void onFavoriteClick(int index) {

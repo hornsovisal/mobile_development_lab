@@ -8,7 +8,7 @@ class TemperatureScreen extends StatefulWidget {
 }
 
 class _TemperatureScreenState extends State<TemperatureScreen> {
-  double celsius = 0;
+  double? celsius;
   double? fahrenheit;
 
   final BoxDecoration textDecoration = BoxDecoration(
@@ -21,8 +21,12 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
       borderSide: const BorderSide(color: Colors.white, width: 1.0),
       borderRadius: BorderRadius.circular(12),
     ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.white, width: 2.0),
+      borderRadius: BorderRadius.circular(12),
+    ),
     hintText: 'Enter a temperature',
-    hintStyle: const TextStyle(color: Colors.white),
+    hintStyle: const TextStyle(color: Colors.white60),
   );
 
   @override
@@ -54,14 +58,16 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
             TextField(
               decoration: inputDecoration,
               style: const TextStyle(color: Colors.white),
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               onChanged: (value) {
                 setState(() {
-                  if (value.trim().isEmpty) {
-                    fahrenheit = null;
+                  celsius = double.tryParse(value);
+                  if (celsius != null) {
+                    fahrenheit = (celsius! * 9 / 5) + 32;
                   } else {
-                    celsius = double.tryParse(value) ?? 0;
-                    fahrenheit = (celsius * 9 / 5) + 32;
+                    fahrenheit = null;
                   }
                 });
               },
@@ -79,7 +85,7 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
                 fahrenheit == null
                     ? "No degree provided"
                     : fahrenheit!.toStringAsFixed(2),
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ],

@@ -21,7 +21,7 @@ class _GroceryScreenState extends State<GroceryScreen> {
   void onCreate() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => GrecoryForm(onCreated: addItem),
+      builder: (context) => GrecoryForm(addItem: addItem),
     );
   }
 

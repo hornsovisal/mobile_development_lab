@@ -17,9 +17,9 @@ import 'package:mobile_development_lab/W7/3%20%20-%20Grocery%20App%20-%20Start/d
 import 'package:mobile_development_lab/W7/3%20%20-%20Grocery%20App%20-%20Start/models/grocery.dart';
 
 class GrecoryForm extends StatefulWidget {
-  final void Function(GroceryItem item) onCreated;
+  final void Function(GroceryItem item) addItem;
 
-  const GrecoryForm({super.key, required this.onCreated});
+  const GrecoryForm({super.key, required this.addItem});
 
   @override
   State<GrecoryForm> createState() => _GrecoryFormState();
@@ -32,8 +32,10 @@ class _GrecoryFormState extends State<GrecoryForm> {
       borderRadius: BorderRadius.circular(12),
     ),
   );
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
+
   @override
   void dispose() {
     nameController.dispose();
@@ -89,7 +91,7 @@ class _GrecoryFormState extends State<GrecoryForm> {
                       quantity: quantity,
                       category: GroceryCategory.fruit,
                     );
-                    widget.onCreated(item);
+                    widget.addItem(item);
                   },
                   child: const Text('Add Item'),
                 ),

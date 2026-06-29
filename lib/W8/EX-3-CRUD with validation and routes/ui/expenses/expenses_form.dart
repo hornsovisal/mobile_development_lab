@@ -21,7 +21,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
     final amount = double.tryParse(_amountController.text);
 
     final isTitleInvalid = title.isEmpty;
-    final isAmountInvalid = amount == null || amount <= 0 || amount > 100;
+    final isAmountInvalid = amount == null || (amount >= 0 && amount <= 100);
 
     if (isTitleInvalid || isAmountInvalid) {
       setState(() {

@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../data/expenses_data.dart';
 import '../../models/expense.dart';
-import 'expenses_form.dart';
+import '../../repository/expense_repository.dart';
 import 'expenses_tile.dart';
-
-Future<List<Expense>> fetchExpenses() async {
-  await Future.delayed(const Duration(seconds: 5));
-  return allExpenses;
-}
 
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
@@ -19,47 +13,53 @@ class ExpensesScreen extends StatefulWidget {
   }
 }
 
+enum AsyncState { notstarted, loading, error, success }
+
 class _ExpensesScreenState extends State<ExpensesScreen> {
-  List<Expense>? expenses;
+  AsyncState state = AsyncState.notstarted;
 
-  @override
-  void initState() {
-    super.initState();
-    loadExpenses();
-  }
+  List<Expense>? expenses; // not null if fetch succeeds
+  String? error; // not null if error
 
-  void loadExpenses() async {
-    List<Expense> fetchedExpenses = await fetchExpenses();
-
-    setState(() {
-      expenses = fetchedExpenses;
-    });
-  }
-
-  void onAddPressed(BuildContext context) async {
-    Expense? newExpense = await showModalBottomSheet<Expense>(
-      isScrollControlled: true,
-      builder: (context) => ExpenseForm(),
-      context: context,
-    );
-
-    if (newExpense != null) {
+  void fetchExpenses() async {
+    try {
       setState(() {
-        allExpenses.add(
-          newExpense,
-        ); // add the new expense to the list and refresh UI
+        state = AsyncState.loading;
+        error = null;
+      });
+
+      expenses = await expenseRepository.fetchExpenses();
+
+      setState(() {
+        state = AsyncState.success;
+      });
+    } on ExpenseException catch (e) {
+      setState(() {
+        error = e.message;
+        state = AsyncState.error;
       });
     }
   }
 
-  Widget getContent() {
-    if (expenses == null) {
-      return const Center(child: CircularProgressIndicator());
+  Widget get content {
+    switch (state) {
+      case AsyncState.notstarted:
+        return const Text("Press refresh icon to fetch");
+
+      case AsyncState.loading:
+        return const CircularProgressIndicator();
+
+      case AsyncState.error:
+        return Text(error!, style: const TextStyle(color: Colors.red));
+
+      case AsyncState.success:
+        return ListView.builder(
+          itemCount: expenses!.length,
+          itemBuilder: (context, index) {
+            return ExpenseTile(expense: expenses![index]);
+          },
+        );
     }
-    return ListView.builder(
-      itemCount: expenses!.length,
-      itemBuilder: (context, i) => ExpenseTile(expense: expenses![i]),
-    );
   }
 
   @override
@@ -68,15 +68,15 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () => onAddPressed(context),
-            icon: Icon(Icons.add),
-          ),
+          IconButton(onPressed: fetchExpenses, icon: const Icon(Icons.refresh)),
         ],
         backgroundColor: Colors.blue[700],
         title: const Text('Ronan-The-Best Expenses App'),
       ),
-      body: Padding(padding: const EdgeInsets.all(20.0), child: getContent()),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(child: content),
+      ),
     );
   }
 }

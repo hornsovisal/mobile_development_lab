@@ -43,6 +43,7 @@ class User {
   });
 
   static User fromJson(Map<String, dynamic> json) {
+    //key of our json file
     const String idKey = 'id';
     const String nameKey = 'name';
     const String usernameKey = 'username';

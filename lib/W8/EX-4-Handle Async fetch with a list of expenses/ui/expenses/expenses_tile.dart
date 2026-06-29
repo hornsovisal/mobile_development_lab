@@ -8,10 +8,7 @@ class ExpenseTile extends StatelessWidget {
   final formatter = DateFormat.yMd();
 
   final Expense expense;
-
-  // We format the date DD/MM/YYYY
-  String get dateFormat => formatter.format(expense.date);
-
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,8 +20,6 @@ class ExpenseTile extends StatelessWidget {
         ),
         child: ListTile(
           title: Text(expense.title),
-          subtitle: Text(dateFormat),
-          leading: Icon(expense.category.icon),
           trailing: Text("${expense.amount.toString()} \$"),
         ),
       ),

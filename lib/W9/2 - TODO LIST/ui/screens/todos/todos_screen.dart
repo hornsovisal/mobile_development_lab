@@ -1,0 +1,153 @@
+import 'package:flutter/material.dart';
+
+import '../../../data/repository/repository_exception.dart';
+
+import '../../../data/repository/todo_repository.dart';
+import '../../../models/todo.dart';
+import '../../theme/app_screen.dart';
+import '../../utils/async_data.dart';
+import 'todo_card.dart';
+
+class TodosScreen extends StatefulWidget {
+  const TodosScreen({super.key});
+
+  @override
+  State<TodosScreen> createState() => _TodosScreenState();
+}
+
+class _TodosScreenState extends State<TodosScreen> {
+  AsyncData<List<Todo>> asyncData = AsyncData.notstarted();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Fetch todos on init state
+    _fetchTodos();
+  }
+
+  void _fetchTodos() async {
+    TodoRepository repository = TodoRepository.global;
+
+    //  TODO
+    // Fetch the list of todos from the repo
+
+    // Handle the success, loading and error cases (catch exception)
+    // Update the widget state (asyncData)
+
+    // List<Todo> todos = await repository.getTodos();
+    // setState(() => asyncData = AsyncData.success(todos),);
+
+    try {
+      //Loading the State
+      setState(() {
+        asyncData = AsyncData.loading();
+      });
+
+      //2. Fetch Data from repo
+      List<Todo> todos = await repository.getTodos();
+
+      //3. Set state to sucess
+      setState(() {
+        asyncData = AsyncData.success(todos);
+      });
+    } catch (error) {
+      setState(() {
+        asyncData = AsyncData.error(error.toString());
+      });
+    }
+  }
+
+  void onUpdateCompleted(Todo todo) async {
+    TodoRepository repository = TodoRepository.global;
+
+    // Save current list before loading
+    List<Todo> currentTodos = asyncData.value ?? [];
+
+    // Change completed value
+    bool newCompleted = !todo.completed;
+
+    try {
+      // 1. Loading state
+      setState(() {
+        asyncData = AsyncData.loading();
+      });
+
+      // 2. Update repository
+      await repository.updateCompleted(todo.id, newCompleted);
+
+      // 3. Update only the modified todo in local cache
+      List<Todo> updatedTodos = currentTodos.map((t) {
+        if (t.id == todo.id) {
+          return Todo(id: t.id, title: t.title, completed: newCompleted);
+        }
+        return t;
+      }).toList();
+
+      // 4. Success state
+      setState(() {
+        asyncData = AsyncData.success(updatedTodos);
+      });
+    } on RepositoryException catch (e) {
+      setState(() {
+        asyncData = AsyncData.error(e.message);
+      });
+    } catch (error) {
+      setState(() {
+        asyncData = AsyncData.error(error.toString());
+      });
+    }
+  }
+
+  Widget get content => switch (asyncData.status) {
+    AsyncStatus.notstarted => Text(
+      "Tap to refresh",
+      style: AppTheme.paragraph.copyWith(color: AppTheme.redColor),
+    ),
+
+    AsyncStatus.loading => CircularProgressIndicator(),
+
+    AsyncStatus.success => _buildTodos(),
+
+    AsyncStatus.error => _buildError(),
+  };
+
+  Widget _buildTodos() {
+    List<Todo> todos = asyncData.value!;
+    return ListView.builder(
+      itemCount: todos.length,
+      itemBuilder: (context, index) =>
+          TodoCard(todo: todos[index], onTap: onUpdateCompleted),
+    );
+  }
+
+  Widget _buildError() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.warning, color: AppTheme.redColor),
+        SizedBox(width: 10),
+
+        Text(
+          asyncData.error!,
+          style: AppTheme.paragraph.copyWith(color: AppTheme.redColor),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: AppTheme.backgroundColor,
+        title: Text("Welcome !", style: AppTheme.heading),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: content),
+      ),
+    );
+  }
+}

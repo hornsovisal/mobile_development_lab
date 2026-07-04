@@ -5,5 +5,5 @@ void main() async {
   print("Fetching expense");
 
   List<Expense> expense = await expenseRepository.fetchExpenses();
-  print("  expense fetched : ${expense.title}");
+  print("  expense fetched : ${expense.length}");
 }

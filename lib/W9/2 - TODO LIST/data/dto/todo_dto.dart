@@ -37,7 +37,6 @@ void main() async {
 
   final List<Todo> todos = [];
 
-  // Case 2: Firebase returns List because keys are 1, 2, 3
   for (int index = 0; index < data.length; index++) {
     final item = data[index];
 

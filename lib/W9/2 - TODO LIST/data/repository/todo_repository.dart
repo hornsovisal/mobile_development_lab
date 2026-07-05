@@ -1,40 +1,72 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:mobile_development_lab/W9/2%20-%20TODO%20LIST/data/dto/todo_dto.dart';
+
 import '../../models/todo.dart';
+import 'repository_exception.dart';
+// import '../dto/todo_dto.dart'; // use this if TodoDto is in another file
 
 class TodoRepository {
-  static final global = TodoRepository();   // unique instance
+  static final global = TodoRepository();
 
-  final List<Todo> fakeTodos = [
-    Todo(id: '1', title: 'Buy groceries', completed: false),
-    Todo(id: '2', title: 'Finish Flutter homework', completed: true),
-    Todo(id: '3', title: 'Call the dentist', completed: false),
-    Todo(id: '4', title: 'Read 20 pages of a book', completed: true),
-    Todo(id: '5', title: 'Go for a 30-minute walk', completed: false),
-  ];
+  static const String baseUrl =
+      "https://dict-67168-default-rtdb.asia-southeast1.firebasedatabase.app";
 
   Future<List<Todo>> getTodos() async {
+    try {
+      Uri url = Uri.parse("$baseUrl/todos.json");
 
-    //  TODO
-    //  Adapt the code to handle firebase data fetch
-    //
- 
-    return Future.delayed(Duration(seconds: 1), () {
-      return fakeTodos;
+      final response = await http.get(url);
 
-      //  TODO
-      // Ensure the message is displayed on the UI if error occured
-      //throw RepositoryException("No wifi !");
+      if (response.statusCode != 200) {
+        throw RepositoryException("Failed to fetch todos");
+      }
 
-    });
+      final data = jsonDecode(response.body);
+
+      List<Todo> todos = [];
+
+      // Your current case: Firebase returns List because keys are 1, 2, 3
+      if (data is List) {
+        for (int index = 0; index < data.length; index++) {
+          final item = data[index];
+
+          if (item == null) {
+            continue;
+          }
+
+          final id = index.toString();
+          final json = item as Map<String, dynamic>;
+
+          todos.add(TodoDto.fromJson(id, json));
+        }
+      }
+
+      return todos;
+    } on RepositoryException {
+      rethrow;
+    } catch (error) {
+      throw RepositoryException("No wifi or failed to load data");
+    }
   }
 
   Future<void> updateCompleted(String todoId, bool completed) async {
-    
-    //  TODO
-    //  Adapt the code to handle firebase data fetch
-    //
-    int index = fakeTodos.indexWhere((e) => e.id == todoId);
-    fakeTodos[index] = fakeTodos[index].copyWith(completed);
+    try {
+      Uri url = Uri.parse("$baseUrl/todos/$todoId.json");
 
-    return Future.delayed(Duration(microseconds: 1), () => true);
+      final response = await http.patch(
+        url,
+        body: jsonEncode({"completed": completed}),
+      );
+
+      if (response.statusCode != 200) {
+        throw RepositoryException("Failed to update todo");
+      }
+    } on RepositoryException {
+      rethrow;
+    } catch (error) {
+      throw RepositoryException("No wifi or failed to update todo");
+    }
   }
 }

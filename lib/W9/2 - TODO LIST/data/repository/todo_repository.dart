@@ -27,20 +27,17 @@ class TodoRepository {
 
       List<Todo> todos = [];
 
-      // Your current case: Firebase returns List because keys are 1, 2, 3
-      if (data is List) {
-        for (int index = 0; index < data.length; index++) {
-          final item = data[index];
+      for (int index = 0; index < data.length; index++) {
+        final item = data[index];
 
-          if (item == null) {
-            continue;
-          }
-
-          final id = index.toString();
-          final json = item as Map<String, dynamic>;
-
-          todos.add(TodoDto.fromJson(id, json));
+        if (item == null) {
+          continue;
         }
+
+        final id = index.toString();
+        final json = item as Map<String, dynamic>;
+
+        todos.add(TodoDto.fromJson(id, json));
       }
 
       return todos;

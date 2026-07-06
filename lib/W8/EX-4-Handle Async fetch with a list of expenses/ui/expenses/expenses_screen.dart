@@ -18,8 +18,8 @@ enum AsyncState { notstarted, loading, error, success }
 class _ExpensesScreenState extends State<ExpensesScreen> {
   AsyncState state = AsyncState.notstarted;
 
-  List<Expense>? expenses; // not null if fetch succeeds
-  String? error; // not null if error
+  List<Expense>? expenses;
+  String? error;
 
   void fetchExpenses() async {
     try {

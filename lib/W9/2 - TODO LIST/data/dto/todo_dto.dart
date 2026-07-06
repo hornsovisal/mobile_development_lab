@@ -9,6 +9,7 @@ class TodoDto {
   static const title = "title";
   static const completed = "completed";
 
+  //json to object
   static Todo fromJson(String id, Map<String, dynamic> json) {
     // Assert the map contains the keys  title and completed with the right data types
 
@@ -16,6 +17,7 @@ class TodoDto {
     return Todo(id: id, title: json['title'], completed: json['completed']);
   }
 
+  //object to json
   static Map<String, dynamic> toJson(Todo todo) {
     return {'title': todo.title, 'completed': todo.completed};
   }
@@ -37,6 +39,7 @@ void main() async {
 
   final List<Todo> todos = [];
 
+  //my json retrun list
   for (int index = 0; index < data.length; index++) {
     final item = data[index];
 

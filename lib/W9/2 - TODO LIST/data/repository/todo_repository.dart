@@ -5,7 +5,6 @@ import 'package:mobile_development_lab/W9/2%20-%20TODO%20LIST/data/dto/todo_dto.
 
 import '../../models/todo.dart';
 import 'repository_exception.dart';
-// import '../dto/todo_dto.dart'; // use this if TodoDto is in another file
 
 class TodoRepository {
   static final global = TodoRepository();

@@ -61,22 +61,18 @@ class _TodosScreenState extends State<TodosScreen> {
   void onUpdateCompleted(Todo todo) async {
     TodoRepository repository = TodoRepository.global;
 
-    // Save current list before loading
     List<Todo> currentTodos = asyncData.value ?? [];
 
-    // Change completed value
     bool newCompleted = !todo.completed;
 
     try {
-      // 1. Loading state
+      // Loading state
       setState(() {
         asyncData = AsyncData.loading();
       });
 
-      // 2. Update repository
       await repository.updateCompleted(todo.id, newCompleted);
 
-      // 3. Update only the modified todo in local cache
       List<Todo> updatedTodos = currentTodos.map((t) {
         if (t.id == todo.id) {
           return Todo(id: t.id, title: t.title, completed: newCompleted);

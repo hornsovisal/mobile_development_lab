@@ -75,7 +75,6 @@ class ButtonStatus {
 
 //Class to manipilate with data in fireabse
 class ButtonRepository {
-  //Function to Fetch Button , it will returrn as a List of ButtonStatus (but Future)
   Future<List<ButtonStatus>> fetchButtons() async {
     Uri url = Uri.parse(
       'https://dict-67168-default-rtdb.asia-southeast1.firebasedatabase.app/buttons.json',
@@ -87,17 +86,15 @@ class ButtonRepository {
       throw Exception('Cannot fetch buttons');
     }
 
-    //decode from respone body to json
-    Map<String, dynamic> json = jsonDecode(response.body);
+    final data = jsonDecode(response.body);
 
     List<ButtonStatus> buttons = [];
 
-    for (String key in json.keys) {
-      Map<String, dynamic> jsonButton = Map<String, dynamic>.from(json[key]);
-
-      ButtonStatus button = ButtonStatus.fromJson(key, jsonButton);
-
-      buttons.add(button);
+    for (int i = 0; i < data.length; i++) {
+      if (data[i] != null) {
+        final jsonButton = Map<String, dynamic>.from(data[i]);
+        buttons.add(ButtonStatus.fromJson(i.toString(), jsonButton));
+      }
     }
 
     return buttons;

@@ -90,6 +90,7 @@ class ButtonRepository {
 
     List<ButtonStatus> buttons = [];
 
+    //our json is a list
     for (int i = 0; i < data.length; i++) {
       if (data[i] != null) {
         final jsonButton = Map<String, dynamic>.from(data[i]);

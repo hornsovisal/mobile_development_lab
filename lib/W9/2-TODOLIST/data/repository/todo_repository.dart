@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobile_development_lab/W9/2%20-%20TODO%20LIST/data/dto/todo_dto.dart';
+import 'package:mobile_development_lab/W9/2-TODOLIST/data/dto/todo_dto.dart';
 
 import '../../models/todo.dart';
 import 'repository_exception.dart';
@@ -22,22 +22,13 @@ class TodoRepository {
         throw RepositoryException("Failed to fetch todos");
       }
 
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
 
-      List<Todo> todos = [];
+      final List<Todo> todos = [];
 
-      for (int index = 0; index < data.length; index++) {
-        final item = data[index];
-
-        if (item == null) {
-          continue;
-        }
-
-        final id = index.toString();
-        final json = item as Map<String, dynamic>;
-
+      data.forEach((id, json) {
         todos.add(TodoDto.fromJson(id, json));
-      }
+      });
 
       return todos;
     } on RepositoryException {

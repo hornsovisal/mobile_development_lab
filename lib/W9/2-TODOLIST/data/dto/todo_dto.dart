@@ -34,24 +34,26 @@ void main() async {
     print("Error: ${response.statusCode}");
     return;
   }
-
-  final data = jsonDecode(response.body);
+  final data = jsonDecode(response.body) as Map<String, dynamic>;
 
   final List<Todo> todos = [];
 
-  //my json retrun list
-  for (int index = 0; index < data.length; index++) {
-    final item = data[index];
-
-    if (item == null) {
-      continue;
-    }
-
-    final id = index.toString();
-    final json = item as Map<String, dynamic>;
-
+  data.forEach((id, json) {
     todos.add(TodoDto.fromJson(id, json));
-  }
+  });
+  // //my json retrun list
+  // for (int index = 0; index < data.length; index++) {
+  //   final item = data[index];
+
+  //   if (item == null) {
+  //     continue;
+  //   }
+
+  //   final id = index.toString();
+  //   final json = item as Map<String, dynamic>;
+
+  //   todos.add(TodoDto.fromJson(id, json));
+  // }
 
   for (Todo todo in todos) {
     print("${todo.id} - ${todo.title} - ${todo.completed}");

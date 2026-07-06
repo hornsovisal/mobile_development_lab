@@ -10,12 +10,12 @@ import 'repository_exception.dart';
 class TodoRepository {
   static final global = TodoRepository();
 
-  static const String baseUrl =
+  static const String base =
       "https://dict-67168-default-rtdb.asia-southeast1.firebasedatabase.app";
 
   Future<List<Todo>> getTodos() async {
     try {
-      Uri url = Uri.parse("$baseUrl/todos.json");
+      Uri url = Uri.parse("$base/todos.json");
 
       final response = await http.get(url);
 
@@ -50,7 +50,7 @@ class TodoRepository {
 
   Future<void> updateCompleted(String todoId, bool completed) async {
     try {
-      Uri url = Uri.parse("$baseUrl/todos/$todoId.json");
+      Uri url = Uri.parse("$base/todos/$todoId.json");
 
       final response = await http.patch(
         url,

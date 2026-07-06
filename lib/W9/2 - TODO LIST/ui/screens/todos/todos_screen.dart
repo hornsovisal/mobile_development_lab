@@ -44,10 +44,10 @@ class _TodosScreenState extends State<TodosScreen> {
         asyncData = AsyncData.loading();
       });
 
-      //2. Fetch Data from repo
+      //Fetch Data from repo
       List<Todo> todos = await repository.getTodos();
 
-      //3. Set state to sucess
+      //Set state to sucess
       setState(() {
         asyncData = AsyncData.success(todos);
       });
@@ -80,7 +80,7 @@ class _TodosScreenState extends State<TodosScreen> {
         return t;
       }).toList();
 
-      // 4. Success state
+      //  Success state
       setState(() {
         asyncData = AsyncData.success(updatedTodos);
       });

@@ -85,18 +85,13 @@ class ButtonRepository {
     if (response.statusCode != 200) {
       throw Exception('Cannot fetch buttons');
     }
-
-    final data = jsonDecode(response.body);
-
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
     List<ButtonStatus> buttons = [];
 
-    //our json is a list
-    for (int i = 0; i < data.length; i++) {
-      if (data[i] != null) {
-        final jsonButton = Map<String, dynamic>.from(data[i]);
-        buttons.add(ButtonStatus.fromJson(i.toString(), jsonButton));
-      }
-    }
+    data.forEach((id, value) {
+      final jsonButton = Map<String, dynamic>.from(value);
+      buttons.add(ButtonStatus.fromJson(id, jsonButton));
+    });
 
     return buttons;
   }
